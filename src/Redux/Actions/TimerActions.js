@@ -13,11 +13,14 @@ function generateID() {
 //      id: number,
 //     duration: number
 //  }
-export const addNewTimer = (timerObj) => {
-    timerObj.id = generateID();
+export const addNewTimer = (duration) => {
     return {
         type: ActionTypes.ADD_NEW_TIMER,
-        timerObj
+        timerObj: {
+            id: generateID(),
+            duration,
+            remaining: duration
+        }
     };
 };
 
@@ -32,21 +35,21 @@ export const removeTimerByIndex = (index) => {
     return {
         type: ActionTypes.REMOVE_TIMER_BY_INDEX,
         index
-    }
-}
+    };
+};
 
 export const editTimerByID = (id, timerObj) => {
     return {
         type: ActionTypes.EDIT_TIMER_BY_ID,
         id,
         timerObj
-    }
-}
+    };
+};
 
 export const editTimerByIndex = (index, timerObj) => {
     return {
         type: ActionTypes.EDIT_TIMER_BY_INDEX,
         index,
         timerObj
-    }
-}
+    };
+};

@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./Redux/Reducers/CombineReducer";
 import { createStore } from "redux";
+import "semantic-ui-css/semantic.min.css";
+import "./COmponents/Components.css"
 
 const store = createStore(rootReducer, composeWithDevTools());
 

@@ -10,6 +10,15 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+                use: {
+                    loader: "url-loader",
+                    options: {
+                        limit: 100000
+                    }
+                }
+            },
             { test: /\.(js)$/, use: "babel-loader" },
             { test: /\.css$/, use: ["style-loader", "css-loader"] }
         ]
