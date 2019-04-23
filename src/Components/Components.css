@@ -5,3 +5,13 @@
     margin-left: 30px;
     margin-top: 30px;
 }
+
+/* TimerHeader.js */
+.timerHeader {
+    display: flex;
+    height: 5vh;
+    width: 100%;
+    background: orange;
+    border: solid 3px black;
+    align-items: center;
+}

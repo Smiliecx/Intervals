@@ -15,7 +15,7 @@ class Timer extends React.Component {
 
         const timeElapsed = moment().diff(this.state.previousRecordedTime);
         const newTime = Math.ceil(timerData.startingDuration - moment.duration(timeElapsed).asSeconds())
-        if (newTime> 0) {
+        if (newTime >= 0) {
             this.props.setTimerDuration(timerData.id,newTime);
         }
     };
