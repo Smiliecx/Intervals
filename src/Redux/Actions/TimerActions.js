@@ -19,7 +19,7 @@ export const addNewTimer = (duration) => {
         timerObj: {
             id: generateID(),
             duration,
-            remaining: duration
+            startingDuration: duration
         }
     };
 };
@@ -53,3 +53,11 @@ export const editTimerByIndex = (index, timerObj) => {
         timerObj
     };
 };
+
+export const setTimerDuration = (id,duration) => {
+    return {
+        type: ActionTypes.SET_TIMER_DURATION,
+        id,
+        duration
+    }
+}

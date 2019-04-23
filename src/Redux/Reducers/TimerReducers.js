@@ -47,6 +47,20 @@ export function TimerReducer(state = intitialTimerState, action) {
                     }
                 })
             };
+        case ActionTypes.SET_TIMER_DURATION:
+            return {
+                ...state,
+                timerList: state.timerList.map((timer) => {
+                    if (timer.id !== action.id) {
+                        return timer;
+                    } else {
+                        return {
+                            ...timer,
+                            duration: action.duration
+                        }
+                    }
+                })
+            }
         default:
             return state;
     }
