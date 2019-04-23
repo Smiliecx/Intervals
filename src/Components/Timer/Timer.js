@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Card } from "semantic-ui-react";
-import { setTimerDuration } from "../../Redux/Actions/TimerActions";
+import { Card, Icon } from "semantic-ui-react";
+import { setTimerDuration, removeTimerByID } from "../../Redux/Actions/TimerActions";
 import moment from "moment"
 
 class Timer extends React.Component {
@@ -20,6 +20,10 @@ class Timer extends React.Component {
         }
     };
 
+    removeTimer = () => {
+        this.props.removeTimerByID(this.props.timerData.id);
+    }
+
     componentDidMount = () => {
         this.setState({
             intervalID: setInterval(this.countDown, 1000),
@@ -31,9 +35,11 @@ class Timer extends React.Component {
         const { timerData } = this.props;
 
         return (
-            <Card color="red">
+            <Card style={{width: "15%"}} color="red">
                 <Card.Content>
-                    <Card.Header textAlign="center">Timer</Card.Header>
+                    <Card.Header textAlign="center">Timer
+                        <Icon style={{paddingLeft: 5}} onClick={this.removeTimer} name="edit" size="small" color="red" link></Icon>
+                    </Card.Header>
                     <Card.Description textAlign="center">
                         {timerData.duration}
                     </Card.Description>
@@ -45,5 +51,5 @@ class Timer extends React.Component {
 
 export default connect(
     null,
-    { setTimerDuration }
+    { setTimerDuration, removeTimerByID }
 )(Timer);

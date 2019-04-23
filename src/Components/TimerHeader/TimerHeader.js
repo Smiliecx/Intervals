@@ -14,7 +14,6 @@ class TimerHeader extends React.Component {
     }
 
     closeModal = () => {
-        console.log("CLOSE");
         this.setState({
             bDisplayAddTimerModal: false
         })
