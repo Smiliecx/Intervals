@@ -15,7 +15,6 @@ class AddTimerModal extends React.Component {
     };
 
     saveInterval = () => {
-        console.log("saveINTERVAL ", this.state.intervalValue);
         this.props.addNewTimer(parseInt(this.state.intervalValue));
     };
 

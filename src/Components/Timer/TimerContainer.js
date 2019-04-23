@@ -2,18 +2,27 @@ import React from "react";
 import { addNewTimer } from "../../Redux/Actions/TimerActions";
 import { connect } from "react-redux";
 import Timer from "./Timer";
+import { Grid } from "semantic-ui-react";
 
 class TimerContainer extends React.Component {
     componentDidMount() {
-        this.props.addNewTimer(12)
+        this.props.addNewTimer(12);
     }
     render() {
         return (
-            <div className="timerContainer">
-                {this.props.timerList.map((timer) => {
-                    return <Timer key={timer.id} timerData={timer} />;
-                })}
-            </div>
+            <Grid
+                style={{ marginTop: "3vh", marginLeft: "5px" }}
+                divided="vertically">
+                <Grid.Row columns={5}>
+                    {this.props.timerList.map((timer) => {
+                        return (
+                            <Grid.Column width={3} key={timer.id}>
+                                <Timer timerData={timer} />
+                            </Grid.Column>
+                        );
+                    })}
+                </Grid.Row>
+            </Grid>
         );
     }
 }
@@ -24,5 +33,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    {addNewTimer}
+    { addNewTimer }
 )(TimerContainer);
