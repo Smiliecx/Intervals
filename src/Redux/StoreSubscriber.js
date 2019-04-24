@@ -41,7 +41,6 @@ function subscribe(key, cb) {
 
     // return "unsubscribe" function
     return function() {
-        console.log("UBSUB", subscribers)
         subscribers[key] = subscribers[key].filter(function(s) {
             return s !== cb;
         });

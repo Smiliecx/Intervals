@@ -6,7 +6,7 @@ import {
     removeTimerByID
 } from "../../Redux/Actions/TimerActions";
 import moment from "moment";
-import { subscribe } from "../../Redux/Reducers/StoreSubscriber";
+import { subscribe } from "../../Redux/StoreSubscriber";
 import EditTimerModal from "./EditTimerModal";
 
 class Timer extends React.Component {
