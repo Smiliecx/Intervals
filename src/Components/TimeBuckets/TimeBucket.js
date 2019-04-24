@@ -1,10 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { addNewTimeBucket } from "../../Redux/Actions/TimeBucketActions";
+import { addNewTimeBucket, editBucketAmountByID } from "../../Redux/Actions/TimeBucketActions";
 
 class TimeBucket extends React.Component {
     componentDidMount() {
-        console.log("ADD BUCKET");
         this.props.addNewTimeBucket("TEST NAME", "Green");
         this.props.addNewTimeBucket("TEST NAME2", "Red");
     }
@@ -13,7 +12,13 @@ class TimeBucket extends React.Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        buckets: state.TimerBuckets.buckets
+    }
+}
+
 export default connect(
-    null,
-    { addNewTimeBucket }
+    mapStateToProps,
+    { addNewTimeBucket , editBucketAmountByID}
 )(TimeBucket);

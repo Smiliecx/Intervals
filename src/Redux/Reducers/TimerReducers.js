@@ -2,10 +2,24 @@ import * as ActionTypes from "../Actions/Types";
 
 const intitialTimerState = {
     timerList: []
-}
+};
 
 export function TimerReducer(state = intitialTimerState, action) {
     switch (action.type) {
+        case ActionTypes.INCREMENT_TIMER_DURATION_BY_ID:
+            return {
+                ...state,
+                timerList: state.timerList.map((timer) => {
+                    if (timer.id === action.id) {
+                        return {
+                            ...timer,
+                            duration: timer.duration + action.duration
+                        };
+                    } else {
+                        return timer;
+                    }
+                })
+            };
         case ActionTypes.ADD_NEW_TIMER:
             return {
                 ...state,

@@ -13,13 +13,14 @@ function generateID() {
 //      id: number,
 //     duration: number
 //  }
-export const addNewTimer = (duration) => {
+export const addNewTimer = (duration, timeBucket="none") => {
     return {
         type: ActionTypes.ADD_NEW_TIMER,
         timerObj: {
             id: generateID(),
             duration,
-            startingDuration: duration
+            startingDuration: duration,
+            timeBucket
         }
     };
 };
@@ -67,3 +68,11 @@ export const setTimerDuration = (id, duration) => {
         duration
     };
 };
+
+export const incrementTimerDurationByID = (id, duration) => {
+    return {
+        type: ActionTypes.INCREMENT_TIMER_DURATION_BY_ID,
+        id,
+        duration
+    }
+}

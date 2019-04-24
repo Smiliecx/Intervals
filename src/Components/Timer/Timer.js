@@ -3,11 +3,13 @@ import { connect } from "react-redux";
 import { Segment, Icon, Header } from "semantic-ui-react";
 import {
     setTimerDuration,
-    removeTimerByID
+    removeTimerByID,
+    incrementTimerDurationByID
 } from "../../Redux/Actions/TimerActions";
 import moment from "moment";
 import { subscribe } from "../../Redux/StoreSubscriber";
 import EditTimerModal from "./EditTimerModal";
+import {increaseBucketAmountByColor} from "../../Redux/Actions/TimeBucketActions"
 
 class Timer extends React.Component {
     state = {
@@ -27,14 +29,18 @@ class Timer extends React.Component {
         const { timerData } = this.props;
 
         const timeElapsed = moment().diff(this.state.previousRecordedTime);
-        const newTime = Math.ceil(
-            timerData.startingDuration -
-                moment.duration(timeElapsed).asSeconds()
-        );
-        if (newTime >= 0) {
-            this.props.setTimerDuration(timerData.id, newTime);
+        const timeElapsedInSeconds = Math.round(moment.duration(timeElapsed).asSeconds());
+
+        this.props.incrementTimerDurationByID(timerData.id, -timeElapsedInSeconds);
+
+        if (timerData.duration < 0) {
+            this.props.increaseBucketAmountByColor(this.props.timeBucketColor, timeElapsedInSeconds);
         }
-    };
+
+        this.setState({
+            previousRecordedTime: moment()
+        })
+    }
 
     displayEditTimerModal = () => {
         this.setState({
@@ -57,23 +63,26 @@ class Timer extends React.Component {
     timerListChanged = (newState, prevState) => {
         const newTimerList = newState.Timers.timerList;
 
-        const newTimer = newTimerList.find( (timer) => {
-            return timer.id === this.props.timerData.id
-        })
+        const newTimer = newTimerList.find((timer) => {
+            return timer.id === this.props.timerData.id;
+        });
 
         if (newTimer.startingDuration !== this.state.startingDuration) {
             this.setState({
                 previousRecordedTime: moment(),
                 startingDuration: newTimer.startingDuration
-            })
+            });
         }
-    }
+    };
 
     componentDidMount = () => {
         this.setState({
             intervalID: setInterval(this.countDown, 1000),
             previousRecordedTime: moment(),
-            unsubscribeFromStore: subscribe("Timers.timerList", this.timerListChanged),
+            unsubscribeFromStore: subscribe(
+                "Timers.timerList",
+                this.timerListChanged
+            ),
             startingDuration: this.props.startingDuration
         });
     };
@@ -121,5 +130,5 @@ class Timer extends React.Component {
 
 export default connect(
     null,
-    { setTimerDuration, removeTimerByID }
+    { setTimerDuration, removeTimerByID, increaseBucketAmountByColor,incrementTimerDurationByID }
 )(Timer);

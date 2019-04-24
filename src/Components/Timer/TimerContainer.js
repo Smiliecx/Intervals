@@ -17,7 +17,7 @@ class TimerContainer extends React.Component {
                     {this.props.timerList.map((timer) => {
                         return (
                             <Grid.Column width={3} key={timer.id}>
-                                <Timer timerData={timer} />
+                                <Timer timerData={timer} timeBucketColor="Red"/>
                             </Grid.Column>
                         );
                     })}
