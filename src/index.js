@@ -5,14 +5,16 @@ import { Provider } from "react-redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import rootReducer from "./Redux/Reducers/CombineReducer";
 import { createStore } from "redux";
+import initSubscriber from "./Redux/Reducers/StoreSubscriber";
 import "semantic-ui-css/semantic.min.css";
-import "./COmponents/Components.css"
+import "./COmponents/Components.css";
 
 const store = createStore(rootReducer, composeWithDevTools());
+initSubscriber(store);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
-  document.getElementById("app")
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById("app")
 );

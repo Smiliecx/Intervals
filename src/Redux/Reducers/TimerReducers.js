@@ -2,7 +2,7 @@ import * as ActionTypes from "../Actions/Types";
 
 const intitialTimerState = {
     timerList: []
-};
+}
 
 export function TimerReducer(state = intitialTimerState, action) {
     switch (action.type) {
@@ -32,7 +32,10 @@ export function TimerReducer(state = intitialTimerState, action) {
                     if (timer.id !== action.id) {
                         return timer;
                     } else {
-                        return { ...timer, ...action.timerObj };
+                        return {
+                            ...timer,
+                            ...action.timerObj
+                        };
                     }
                 })
             };
@@ -57,10 +60,10 @@ export function TimerReducer(state = intitialTimerState, action) {
                         return {
                             ...timer,
                             duration: action.duration
-                        }
+                        };
                     }
                 })
-            }
+            };
         default:
             return state;
     }

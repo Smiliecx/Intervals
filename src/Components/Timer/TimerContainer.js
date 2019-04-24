@@ -6,7 +6,7 @@ import { Grid } from "semantic-ui-react";
 
 class TimerContainer extends React.Component {
     componentDidMount() {
-        this.props.addNewTimer(12);
+        
     }
     render() {
         return (

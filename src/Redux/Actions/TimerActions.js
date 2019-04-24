@@ -39,6 +39,9 @@ export const removeTimerByIndex = (index) => {
 };
 
 export const editTimerByID = (id, timerObj) => {
+    if (timerObj.duration) {
+        timerObj.startingDuration = timerObj.duration;
+    }
     return {
         type: ActionTypes.EDIT_TIMER_BY_ID,
         id,
@@ -47,6 +50,9 @@ export const editTimerByID = (id, timerObj) => {
 };
 
 export const editTimerByIndex = (index, timerObj) => {
+    if (timerObj.duration) {
+        timerObj.startingDuration = timerObj.duration;
+    }
     return {
         type: ActionTypes.EDIT_TIMER_BY_INDEX,
         index,
@@ -54,10 +60,10 @@ export const editTimerByIndex = (index, timerObj) => {
     };
 };
 
-export const setTimerDuration = (id,duration) => {
+export const setTimerDuration = (id, duration) => {
     return {
         type: ActionTypes.SET_TIMER_DURATION,
         id,
         duration
-    }
-}
+    };
+};

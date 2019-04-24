@@ -6,16 +6,24 @@ import {
     removeTimerByID
 } from "../../Redux/Actions/TimerActions";
 import moment from "moment";
+import { subscribe } from "../../Redux/Reducers/StoreSubscriber";
 import EditTimerModal from "./EditTimerModal";
 
 class Timer extends React.Component {
     state = {
         invervalID: null,
         previousRecordedTime: null,
-        bDisplayEditTimerModal: false
+        startingDuration: 0,
+        bDisplayEditTimerModal: false,
+        unsubscribeFromStore: null
     };
 
-    countDown = () => {
+    constructor(props) {
+        super(props);
+        this.countDown = this.countDown.bind(this);
+    }
+
+    countDown() {
         const { timerData } = this.props;
 
         const timeElapsed = moment().diff(this.state.previousRecordedTime);
@@ -31,30 +39,48 @@ class Timer extends React.Component {
     displayEditTimerModal = () => {
         this.setState({
             bDisplayEditTimerModal: true
-        })
+        });
     };
 
     closeModals = () => {
         this.setState({
             bDisplayEditTimerModal: false
-        })
-    }
+        });
+    };
 
     removeTimer = () => {
+        clearInterval(this.state.intervalID);
+        this.state.unsubscribeFromStore();
         this.props.removeTimerByID(this.props.timerData.id);
     };
+
+    timerListChanged = (newState, prevState) => {
+        const newTimerList = newState.Timers.timerList;
+
+        const newTimer = newTimerList.find( (timer) => {
+            return timer.id === this.props.timerData.id
+        })
+
+        if (newTimer.startingDuration !== this.state.startingDuration) {
+            this.setState({
+                previousRecordedTime: moment(),
+                startingDuration: newTimer.startingDuration
+            })
+        }
+    }
 
     componentDidMount = () => {
         this.setState({
             intervalID: setInterval(this.countDown, 1000),
-            previousRecordedTime: moment()
+            previousRecordedTime: moment(),
+            unsubscribeFromStore: subscribe("Timers.timerList", this.timerListChanged),
+            startingDuration: this.props.startingDuration
         });
     };
 
     render() {
         const { timerData } = this.props;
-        const {bDisplayEditTimerModal} = this.state;
-
+        const { bDisplayEditTimerModal } = this.state;
         return (
             <React.Fragment>
                 <Segment color="red" raised>
@@ -81,7 +107,13 @@ class Timer extends React.Component {
                         {timerData.duration}
                     </span>
                 </Segment>
-                {bDisplayEditTimerModal && <EditTimerModal closeModal={this.closeModals} removeTimer={this.removeTimer} />}
+                {bDisplayEditTimerModal && (
+                    <EditTimerModal
+                        closeModal={this.closeModals}
+                        removeTimer={this.removeTimer}
+                        timerID={timerData.id}
+                    />
+                )}
             </React.Fragment>
         );
     }
