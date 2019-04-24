@@ -100,7 +100,7 @@ class Timer extends React.Component {
                             alignItems: "center"
                         }}>
                         <span style={{ display: "flex", alignItems: "center" }}>
-                            <h3 style={{ padding: 0, marginBottom: 3 }}>
+                            <h3 style={{ padding: 0, marginBottom: 3}}>
                                 Timer
                             </h3>
                             <Icon
@@ -113,7 +113,7 @@ class Timer extends React.Component {
                             />
                         </span>
 
-                        {timerData.duration}
+                        <div style={(timerData.duration >= 0) ? {color: "black"} : {color: "red"}}>{timerData.duration}</div>
                     </span>
                 </Segment>
                 {bDisplayEditTimerModal && (
