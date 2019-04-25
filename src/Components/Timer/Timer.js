@@ -41,7 +41,7 @@ class Timer extends React.Component {
             -timeElapsedInSeconds
         );
 
-        if (timerData.duration < 0) {
+        if (timerData.duration <= 0) {
             this.props.increaseBucketAmountByColor(
                 timerData.timerBucketColor,
                 timeElapsedInSeconds
