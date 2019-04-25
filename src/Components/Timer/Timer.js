@@ -34,7 +34,7 @@ class Timer extends React.Component {
         this.props.incrementTimerDurationByID(timerData.id, -timeElapsedInSeconds);
 
         if (timerData.duration < 0) {
-            this.props.increaseBucketAmountByColor(this.props.timeBucketColor, timeElapsedInSeconds);
+            this.props.increaseBucketAmountByColor(timerData.timerBucketColor, timeElapsedInSeconds);
         }
 
         this.setState({
@@ -92,7 +92,7 @@ class Timer extends React.Component {
         const { bDisplayEditTimerModal } = this.state;
         return (
             <React.Fragment>
-                <Segment color="red" raised>
+                <Segment color={timerData.bucketColor} raised>
                     <span
                         style={{
                             display: "flex",

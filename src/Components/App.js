@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import TimerContainer from "./Timer/TimerContainer";
 import TimerHeader from "./TimerHeader/TimerHeader";
-import TimeBucket from "./TimeBuckets/TimeBucket";
+import TimerBucketContainer from "./TimeBuckets/TimerBucketContainer";
 
 class App extends React.Component {
     render() {
@@ -10,7 +10,7 @@ class App extends React.Component {
             <React.Fragment>
                 <TimerHeader />
                 <TimerContainer />
-                <TimeBucket />
+                <TimerBucketContainer />
             </React.Fragment>
         );
     }

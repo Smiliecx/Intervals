@@ -44,8 +44,8 @@ class AddTimerModal extends React.Component {
         this.props.setLastTimerData(timerAmount, this.state.timerBucketName, this.state.timerBucketColor)
     }
 
-    saveInterval = () => {
-        this.props.addNewTimer(parseInt(this.state.timerValue));
+    saveTimer = () => {
+        this.props.addNewTimer(parseInt(this.state.timerValue), this.state.timerBucketName, this.state.timerBucketColor);
     };
 
     isModalReadyForSubmit = () => {
@@ -98,7 +98,7 @@ class AddTimerModal extends React.Component {
                 <Modal.Actions>
                     <Button
                         color="green"
-                        onClick={this.saveInterval}
+                        onClick={this.saveTimer}
                         disabled={!this.isModalReadyForSubmit()}>
                         Submit
                     </Button>

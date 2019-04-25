@@ -7,6 +7,10 @@ const initialBucketState = {
 export function TimeBucketReducer(state = initialBucketState, action) {
     switch (action.type) {
         case ActionTypes.ADD_NEW_TIMEBUCKET:
+            const bFoundElement = state.buckets.find((bucket) => {
+                return bucket.color === action.color;
+            });
+            if (bFoundElement !== undefined) return state;
             return {
                 buckets: [...state.buckets, action.bucketObj]
             };
