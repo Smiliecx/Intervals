@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Modal, Button, Input } from "semantic-ui-react";
-import { addNewInterval } from "../../Redux/Actions/IntervalsActions";
+import { Modal, Button, Input, Divider, Table, Icon } from "semantic-ui-react";
+import { addNewInterval, removeIntervalByID } from "../../Redux/Actions/IntervalsActions";
 
 class ManageIntervalModal extends React.Component {
     state = {
@@ -17,7 +17,7 @@ class ManageIntervalModal extends React.Component {
     };
 
     addNewInterval = () => {
-        const {intervalName} = this.state;
+        const { intervalName } = this.state;
         if (!this.isFormValid()) return;
         this.setState({
             intervalName: ""
@@ -67,6 +67,7 @@ class ManageIntervalModal extends React.Component {
 
     render() {
         const { intervalName, errorMessage } = this.state;
+        const { intervals, timers } = this.props;
 
         return (
             <Modal open={true}>
@@ -83,11 +84,65 @@ class ManageIntervalModal extends React.Component {
                     />
 
                     <h3 style={{ display: "inline", marginLeft: 20 }}>
-                        {this.props.timers.length} Timers in Interval
+                        {timers.length} Timers in Interval
                     </h3>
                     <h4 style={{ marginTop: 5, color: "red" }}>
                         {errorMessage}
                     </h4>
+
+                    <Divider />
+
+                    <Table striped>
+                        <Table.Row>
+                            <Table.Header>
+                                <Table.HeaderCell width={3}>
+                                    Interval Name
+                                </Table.HeaderCell>
+                                <Table.HeaderCell width={1}>
+                                    # of timers
+                                </Table.HeaderCell>
+                                <Table.HeaderCell width={3}>
+                                    Click to Append Interval
+                                </Table.HeaderCell>
+                                <Table.HeaderCell width={3}>
+                                    Click to Delete Interval
+                                </Table.HeaderCell>
+                            </Table.Header>
+                            <Table.Body>
+                                {Object.keys(intervals).map(
+                                    (intervalKey, index) => {
+                                        const intervalObj =
+                                            intervals[intervalKey];
+                                        return (
+                                            <Table.Row key={intervalKey}>
+                                                <Table.Cell>
+                                                    {intervalObj.name}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {intervalObj.timers.length}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <Icon
+                                                        link
+                                                        name="checkmark"
+                                                        color="green"
+                                                    />
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <Icon
+                                                        onClick={() => this.props.removeIntervalByID(intervalKey)}
+                                                        link
+                                                        name="close"
+                                                        color="red"
+                                                    />
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        );
+                                    }
+                                )}
+                            </Table.Body>
+                        </Table.Row>
+                    </Table>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button
@@ -114,5 +169,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { addNewInterval }
+    { addNewInterval, removeIntervalByID }
 )(ManageIntervalModal);

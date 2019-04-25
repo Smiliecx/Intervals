@@ -1,14 +1,5 @@
 import * as ActionTypes from "./Types";
 
-function generateID() {
-    return (
-        "_" +
-        Math.random()
-            .toString(36)
-            .substr(2, 9)
-    );
-}
-
 //  TimerPayload = {
 //      id: number,
 //     duration: number
@@ -17,7 +8,7 @@ export const addNewTimer = (duration, timerBucketName, timerBucketColor) => {
     return {
         type: ActionTypes.ADD_NEW_TIMER,
         timerObj: {
-            id: generateID(),
+            id: ActionTypes.generateID(),
             duration,
             startingDuration: duration,
             timerBucketName,

@@ -8,3 +8,11 @@ export const addNewInterval = (name, timers) => {
         timers
     };
 };
+
+export const removeIntervalByID = (id) => {
+    console.log("remove: ", id);
+    return {
+        type: ActionTypes.REMOVE_INTERVAL_BY_ID,
+        id
+    }
+}

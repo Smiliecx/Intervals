@@ -17,6 +17,13 @@ export function IntervalsReducer(state = initialState, action) {
                     }
                 }
             };
+        case ActionTypes.REMOVE_INTERVAL_BY_ID:
+            let intervalsCopy = { ...state.intervals };
+            delete intervalsCopy[action.id];
+            return {
+                ...state,
+                intervals: intervalsCopy
+            };
         default:
             return state;
     }

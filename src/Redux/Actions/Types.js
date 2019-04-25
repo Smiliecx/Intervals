@@ -18,6 +18,7 @@ export const INCREASE_BUCKET_AMOUNT_BY_COLOR =
 
 /* Intervals Actions */
 export const ADD_NEW_INTERVAL = "ADD_NEW_INTERVAL";
+export const REMOVE_INTERVAL_BY_ID = "REMOVE_INTERVAL_BY_ID";
 
 
 export function generateID() {
