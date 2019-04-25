@@ -19,7 +19,7 @@ class TimerBucketContainer extends React.Component {
         const { timeBuckets } = this.props;
 
         return (
-            <Segment raised>
+            <Segment raised >
                 <span style={{display: "flex"}}>
                     {timeBuckets.map((bucket) => {
                         return <TimeBucket key={bucket.id} bucketData={bucket}/>;
