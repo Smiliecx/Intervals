@@ -1,7 +1,10 @@
 import * as ActionTypes from "../Actions/Types";
 
 const intitialTimerState = {
-    timerList: []
+    timerList: [],
+    lastTimerAmount: 0,
+    lastTimerColor: "Red",
+    lastTimerBucketName: "Default"
 };
 
 export function TimerReducer(state = intitialTimerState, action) {
@@ -77,6 +80,13 @@ export function TimerReducer(state = intitialTimerState, action) {
                         };
                     }
                 })
+            };
+        case ActionTypes.SET_LAST_TIMER_DATA:
+            return {
+                ...state,
+                lastTimerAmount: action.amount,
+                lastTimerBucketName: action.bucketName,
+                lastTimerColor: action.bucketColor
             };
         default:
             return state;

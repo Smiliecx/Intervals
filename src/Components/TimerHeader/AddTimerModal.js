@@ -1,29 +1,63 @@
 import React from "react";
 import { connect } from "react-redux";
-import { addNewTimer } from "../../Redux/Actions/TimerActions";
-import { Modal, Input, Button } from "semantic-ui-react";
+import {
+    addNewTimer,
+    setLastTimerData
+} from "../../Redux/Actions/TimerActions";
+import { Modal, Input, Button, Dropdown } from "semantic-ui-react";
 
 class AddTimerModal extends React.Component {
     state = {
-        intervalValue: ""
+        timerValue: this.props.lastTimerAmount,
+        timerBucketName: this.props.lastTimerBucketName,
+        timerBucketColor: this.props.lastTimerColor
     };
 
-    handleIntervalValueChange = (event) => {
-        this.setState({
-            intervalValue: event.target.value
-        });
+    dropDownOptions = [
+        { key: "Red", value: "Red", text: "Red" },
+        { key: "Blue", value: "Blue", text: "Blue" },
+        { key: "Green", value: "Green", text: "Green" },
+        { key: "Orange", value: "Orange", text: "Orange" },
+        { key: "Yellow", value: "Yellow", text: "Yellow" }
+    ];
+
+    handleValueChange = (event, { value }) => {
+        if (event.target.value !== undefined) {
+            this.setState(
+                {
+                    [event.target.name]: event.target.value
+                },
+                this.setTimerDataOnStore
+            );
+        } else if (value !== undefined) {
+            this.setState({
+                timerBucketColor: value
+            }, this.setTimerDataOnStore);
+        }
     };
+
+    setTimerDataOnStore = () => {
+        const timerAmount = Math.max(
+            parseInt(this.state.timerValue),
+            0
+        );
+        this.props.setLastTimerData(timerAmount, this.state.timerBucketName, this.state.timerBucketColor)
+    }
 
     saveInterval = () => {
-        this.props.addNewTimer(parseInt(this.state.intervalValue));
+        this.props.addNewTimer(parseInt(this.state.timerValue));
     };
 
     isModalReadyForSubmit = () => {
-        return !this.state.intervalValue.length > 0;
+        return (
+            this.state.timerValue.length > 0 &&
+            this.state.timerBucketColor.length > 0 &&
+            this.state.timerBucketName.length > 0
+        );
     };
 
     render() {
-        const { intervalValue } = this.state;
+        const { timerValue, timerBucketName, timerBucketColor } = this.state;
 
         return (
             <Modal open={true} size="small">
@@ -31,12 +65,33 @@ class AddTimerModal extends React.Component {
 
                 <Modal.Content>
                     <Input
+                        name="timerValue"
                         type="number"
                         icon="clock"
                         iconPosition="left"
                         placeholder="Interval Amount"
-                        value={intervalValue}
-                        onChange={this.handleIntervalValueChange}
+                        error={timerValue.length === 0}
+                        value={timerValue}
+                        onChange={this.handleValueChange}
+                    />
+                    <Input
+                        name="timerBucketName"
+                        type="text"
+                        icon="edit"
+                        error={timerBucketName.length === 0}
+                        iconPosition="left"
+                        placeholder="Time Bucket Name"
+                        value={timerBucketName}
+                        onChange={this.handleValueChange}
+                    />
+                    <Dropdown
+                        name="timerBucketColor"
+                        selection
+                        placeholder="Select a Time Group"
+                        options={this.dropDownOptions}
+                        onChange={this.handleValueChange}
+                        error={timerBucketColor.length === 0}
+                        value={timerBucketColor}
                     />
                 </Modal.Content>
 
@@ -44,7 +99,7 @@ class AddTimerModal extends React.Component {
                     <Button
                         color="green"
                         onClick={this.saveInterval}
-                        disabled={this.isModalReadyForSubmit()}>
+                        disabled={!this.isModalReadyForSubmit()}>
                         Submit
                     </Button>
                     <Button color="red" onClick={this.props.closeModal}>
@@ -56,4 +111,15 @@ class AddTimerModal extends React.Component {
     }
 }
 
-export default connect(null, {addNewTimer})(AddTimerModal);
+function mapStateToProps(state) {
+    return {
+        lastTimerAmount: state.Timers.lastTimerAmount,
+        lastTimerColor: state.Timers.lastTimerColor,
+        lastTimerBucketName: state.Timers.lastTimerBucketName
+    };
+}
+
+export default connect(
+    mapStateToProps,
+    { addNewTimer, setLastTimerData }
+)(AddTimerModal);

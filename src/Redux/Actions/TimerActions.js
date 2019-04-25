@@ -76,3 +76,12 @@ export const incrementTimerDurationByID = (id, duration) => {
         duration
     }
 }
+
+export const setLastTimerData = (amount, bucketName, bucketColor) => {
+    return {
+        type: ActionTypes.SET_LAST_TIMER_DATA,
+        amount,
+        bucketName,
+        bucketColor
+    }
+}
