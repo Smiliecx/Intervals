@@ -18,6 +18,11 @@ class TimerContainer extends React.Component {
                                 <Timer
                                     timerData={timer}
                                     bIsFirstTimer={index === 0}
+                                    bIsLastTimer={
+                                        index ===
+                                        this.props.timerList.length - 1
+                                    }
+                                    timerIndex={index}
                                 />
                             </Grid.Column>
                         );

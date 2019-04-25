@@ -93,3 +93,17 @@ export const restartTimerByID = (id) => {
         id
     };
 };
+
+export const moveTimerByID = (id, direction) => {
+    if (direction <= 0){
+        direction = -1;
+    }else {
+        direction = 1;
+    }
+    
+    return {
+        type: ActionTypes.MOVE_TIMER_BY_ID,
+        id,
+        direction
+    }
+}

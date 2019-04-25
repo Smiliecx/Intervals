@@ -5,7 +5,8 @@ import {
     setTimerDuration,
     removeTimerByID,
     incrementTimerDurationByID,
-    restartTimerByID
+    restartTimerByID,
+    moveTimerByID
 } from "../../Redux/Actions/TimerActions";
 import moment from "moment";
 import { subscribe } from "../../Redux/StoreSubscriber";
@@ -66,6 +67,7 @@ class Timer extends React.Component {
 
     removeTimer = () => {
         this.stopTimer();
+        this.state.unsubscribeFromStore();
         this.props.removeTimerByID(this.props.timerData.id);
     };
 
@@ -84,9 +86,20 @@ class Timer extends React.Component {
         }
     };
 
+    moveTimerUp = () => {
+        this.props.moveTimerByID(this.props.timerData.id, -1);
+    }
+
+    moveTimerDown = () => {
+        this.props.moveTimerByID(this.props.timerData.id, 1);
+    }
+
     restartTimer = () => {
         this.props.restartTimerByID(this.props.timerData.id);
-    }
+        if (this.state.bIsPlaying) {
+            this.stopTimer();
+        }
+    };
 
     toggleTimer = () => {
         if (this.state.bIsPlaying) {
@@ -111,7 +124,6 @@ class Timer extends React.Component {
 
     stopTimer = () => {
         clearInterval(this.state.intervalID);
-        this.state.unsubscribeFromStore();
         this.setState({
             bIsPlaying: false
         });
@@ -133,7 +145,8 @@ class Timer extends React.Component {
     };
 
     render() {
-        const { timerData, bIsFirstTimer } = this.props;
+        //prettier-ignore
+        const { timerData, bIsFirstTimer, bIsLastTimer, timerIndex } = this.props;
         const { bDisplayEditTimerModal, bIsPlaying } = this.state;
         return (
             <React.Fragment>
@@ -144,6 +157,24 @@ class Timer extends React.Component {
                             flexDirection: "column",
                             alignItems: "center"
                         }}>
+                        <span style={{ display: "flex" }}>
+                            <Icon
+                                onClick={this.moveTimerUp}
+                                link={!bIsFirstTimer}
+                                disabled={bIsFirstTimer}
+                                name="arrow left"
+                                color="green"
+                                size="small"
+                            />
+                            <Icon
+                                onClick={this.moveTimerDown}
+                                link={!bIsLastTimer}
+                                disabled={bIsLastTimer}
+                                name="arrow right"
+                                color="green"
+                                size="small"
+                            />
+                        </span>
                         <span style={{ display: "flex", alignItems: "center" }}>
                             <h3 style={{ padding: 0, marginBottom: 3 }}>
                                 Timer
@@ -175,7 +206,13 @@ class Timer extends React.Component {
                             name={bIsPlaying ? "stop" : "play"}
                             disabled={!bIsFirstTimer}
                         />
-                        <Icon onClick={this.restartTimer} name="repeat" size="small" link color="yellow" />
+                        <Icon
+                            onClick={this.restartTimer}
+                            name="repeat"
+                            size="small"
+                            link
+                            color="yellow"
+                        />
                     </span>
                 </Segment>
                 {bDisplayEditTimerModal && (
@@ -197,6 +234,7 @@ export default connect(
         removeTimerByID,
         increaseBucketAmountByColor,
         incrementTimerDurationByID,
-        restartTimerByID
+        restartTimerByID,
+        moveTimerByID
     }
 )(Timer);

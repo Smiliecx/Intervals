@@ -99,6 +99,24 @@ export function TimerReducer(state = intitialTimerState, action) {
                     }
                 })
             };
+        case ActionTypes.MOVE_TIMER_BY_ID:
+            const timerIndexToMove = state.timerList.findIndex((timer) => {
+                return timer.id === action.id;
+            });
+
+            const newIndex = timerIndexToMove + action.direction;
+            if (newIndex < 0 || newIndex >= state.timerList.length)
+                return state;
+
+            let copiedArray = state.timerList.slice();
+            [copiedArray[timerIndexToMove], copiedArray[newIndex]] = [
+                copiedArray[newIndex],
+                copiedArray[timerIndexToMove]
+            ];
+            return {
+                ...state,
+                timerList: copiedArray
+            };
         default:
             return state;
     }
