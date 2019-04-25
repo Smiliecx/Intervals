@@ -75,8 +75,8 @@ export const incrementTimerDurationByID = (id, duration) => {
         type: ActionTypes.INCREMENT_TIMER_DURATION_BY_ID,
         id,
         duration
-    }
-}
+    };
+};
 
 export const setLastTimerData = (amount, bucketName, bucketColor) => {
     return {
@@ -84,5 +84,12 @@ export const setLastTimerData = (amount, bucketName, bucketColor) => {
         amount,
         bucketName,
         bucketColor
-    }
-}
+    };
+};
+
+export const restartTimerByID = (id) => {
+    return {
+        type: ActionTypes.RESTART_TIMER_BY_ID,
+        id
+    };
+};

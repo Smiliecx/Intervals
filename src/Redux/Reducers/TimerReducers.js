@@ -88,6 +88,17 @@ export function TimerReducer(state = intitialTimerState, action) {
                 lastTimerBucketName: action.bucketName,
                 lastTimerColor: action.bucketColor
             };
+        case ActionTypes.RESTART_TIMER_BY_ID:
+            return {
+                ...state,
+                timerList: state.timerList.map((timer) => {
+                    if (timer.id === action.id) {
+                        return { ...timer, duration: timer.startingDuration };
+                    } else {
+                        return timer;
+                    }
+                })
+            };
         default:
             return state;
     }

@@ -1,15 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Segment, Icon, Header } from "semantic-ui-react";
+import { Segment, Icon } from "semantic-ui-react";
 import {
     setTimerDuration,
     removeTimerByID,
-    incrementTimerDurationByID
+    incrementTimerDurationByID,
+    restartTimerByID
 } from "../../Redux/Actions/TimerActions";
 import moment from "moment";
 import { subscribe } from "../../Redux/StoreSubscriber";
 import EditTimerModal from "./EditTimerModal";
-import {increaseBucketAmountByColor} from "../../Redux/Actions/TimeBucketActions"
+import { increaseBucketAmountByColor } from "../../Redux/Actions/TimeBucketActions";
 
 class Timer extends React.Component {
     state = {
@@ -17,7 +18,8 @@ class Timer extends React.Component {
         previousRecordedTime: null,
         startingDuration: 0,
         bDisplayEditTimerModal: false,
-        unsubscribeFromStore: null
+        unsubscribeFromStore: null,
+        bIsPlaying: false
     };
 
     constructor(props) {
@@ -29,17 +31,25 @@ class Timer extends React.Component {
         const { timerData } = this.props;
 
         const timeElapsed = moment().diff(this.state.previousRecordedTime);
-        const timeElapsedInSeconds = Math.round(moment.duration(timeElapsed).asSeconds());
+        const timeElapsedInSeconds = Math.round(
+            moment.duration(timeElapsed).asSeconds()
+        );
 
-        this.props.incrementTimerDurationByID(timerData.id, -timeElapsedInSeconds);
+        this.props.incrementTimerDurationByID(
+            timerData.id,
+            -timeElapsedInSeconds
+        );
 
         if (timerData.duration < 0) {
-            this.props.increaseBucketAmountByColor(timerData.timerBucketColor, timeElapsedInSeconds);
+            this.props.increaseBucketAmountByColor(
+                timerData.timerBucketColor,
+                timeElapsedInSeconds
+            );
         }
 
         this.setState({
             previousRecordedTime: moment()
-        })
+        });
     }
 
     displayEditTimerModal = () => {
@@ -55,8 +65,7 @@ class Timer extends React.Component {
     };
 
     removeTimer = () => {
-        clearInterval(this.state.intervalID);
-        this.state.unsubscribeFromStore();
+        this.stopTimer();
         this.props.removeTimerByID(this.props.timerData.id);
     };
 
@@ -75,7 +84,19 @@ class Timer extends React.Component {
         }
     };
 
-    componentDidMount = () => {
+    restartTimer = () => {
+        this.props.restartTimerByID(this.props.timerData.id);
+    }
+
+    toggleTimer = () => {
+        if (this.state.bIsPlaying) {
+            this.stopTimer();
+        } else {
+            this.startTimer();
+        }
+    };
+
+    startTimer = () => {
         this.setState({
             intervalID: setInterval(this.countDown, 1000),
             previousRecordedTime: moment(),
@@ -83,13 +104,37 @@ class Timer extends React.Component {
                 "Timers.timerList",
                 this.timerListChanged
             ),
-            startingDuration: this.props.startingDuration
+            startingDuration: this.props.startingDuration,
+            bIsPlaying: true
         });
     };
 
+    stopTimer = () => {
+        clearInterval(this.state.intervalID);
+        this.state.unsubscribeFromStore();
+        this.setState({
+            bIsPlaying: false
+        });
+    };
+
+    componentDidMount = () => {
+        if (this.props.bIsFirstTimer) {
+            this.startTimer();
+        }
+    };
+
+    componentDidUpdate = (prevProps) => {
+        if (prevProps.bIsFirstTimer !== this.props.bIsFirstTimer) {
+            if (this.props.bIsFirstTimer) {
+            } else {
+                this.stopTimer();
+            }
+        }
+    };
+
     render() {
-        const { timerData } = this.props;
-        const { bDisplayEditTimerModal } = this.state;
+        const { timerData, bIsFirstTimer } = this.props;
+        const { bDisplayEditTimerModal, bIsPlaying } = this.state;
         return (
             <React.Fragment>
                 <Segment color={timerData.bucketColor} raised>
@@ -100,7 +145,7 @@ class Timer extends React.Component {
                             alignItems: "center"
                         }}>
                         <span style={{ display: "flex", alignItems: "center" }}>
-                            <h3 style={{ padding: 0, marginBottom: 3}}>
+                            <h3 style={{ padding: 0, marginBottom: 3 }}>
                                 Timer
                             </h3>
                             <Icon
@@ -113,7 +158,24 @@ class Timer extends React.Component {
                             />
                         </span>
 
-                        <div style={(timerData.duration >= 0) ? {color: "black"} : {color: "red"}}>{timerData.duration}</div>
+                        <div
+                            style={
+                                timerData.duration >= 0
+                                    ? { color: "black" }
+                                    : { color: "red" }
+                            }>
+                            {timerData.duration}
+                        </div>
+
+                        <Icon
+                            onClick={this.toggleTimer}
+                            size="small"
+                            link={bIsFirstTimer}
+                            color={bIsPlaying ? "red" : "green"}
+                            name={bIsPlaying ? "stop" : "play"}
+                            disabled={!bIsFirstTimer}
+                        />
+                        <Icon onClick={this.restartTimer} name="repeat" size="small" link color="yellow" />
                     </span>
                 </Segment>
                 {bDisplayEditTimerModal && (
@@ -130,5 +192,11 @@ class Timer extends React.Component {
 
 export default connect(
     null,
-    { setTimerDuration, removeTimerByID, increaseBucketAmountByColor,incrementTimerDurationByID }
+    {
+        setTimerDuration,
+        removeTimerByID,
+        increaseBucketAmountByColor,
+        incrementTimerDurationByID,
+        restartTimerByID
+    }
 )(Timer);
