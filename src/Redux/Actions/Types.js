@@ -15,3 +15,16 @@ export const EDIT_BUCKET_AMOUNT_BY_ID = "EDIT_BUCKET_AMOUNT_BY_ID";
 export const EDIT_BUCKET_AMOUNT_BY_COLOR = "EDIT_BUCKET_AMOUNT_BY_COLOR";
 export const INCREASE_BUCKET_AMOUNT_BY_COLOR =
     "INCREASE_BUCKET_AMOUNT_BY_COLOR";
+
+/* Intervals Actions */
+export const ADD_NEW_INTERVAL = "ADD_NEW_INTERVAL";
+
+
+export function generateID() {
+    return (
+        "_" +
+        Math.random()
+            .toString(36)
+            .substr(2, 9)
+    );
+}
