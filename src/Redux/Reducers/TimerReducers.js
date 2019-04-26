@@ -141,7 +141,6 @@ export function TimerReducer(state = intitialTimerState, action) {
                 timerList: newTimerList
             };
         case ActionTypes.DISTRIBUTE_TIME_BUCKET:
-            console.log("REDUCER");
             const clonedArray = state.timerList.map((timer) => {
                 return {
                     ...timer

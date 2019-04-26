@@ -4,7 +4,7 @@ import * as ActionTypes from "./Types";
 //      id: number,
 //     duration: number
 //  }
-export const addNewTimer = (duration, timerBucketName, timerBucketColor, autoFinish) => {
+export const addNewTimer = (duration, timerBucketName, timerBucketColor, finishOption, autoStart) => {
     return {
         type: ActionTypes.ADD_NEW_TIMER,
         timerObj: {
@@ -13,7 +13,8 @@ export const addNewTimer = (duration, timerBucketName, timerBucketColor, autoFin
             startingDuration: duration,
             timerBucketName,
             timerBucketColor,
-            autoFinish,
+            finishOption,
+            autoStart,
             forceStart: false
         }
     };

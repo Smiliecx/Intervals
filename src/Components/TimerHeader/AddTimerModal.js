@@ -11,7 +11,8 @@ class AddTimerModal extends React.Component {
         timerValue: this.props.lastTimerAmount,
         timerBucketName: this.props.lastTimerBucketName,
         timerBucketColor: this.props.lastTimerColor,
-        autoFinish: false
+        finishOption: "Continue",
+        autoStart: true
     };
 
     dropDownOptions = [
@@ -22,7 +23,13 @@ class AddTimerModal extends React.Component {
         { key: "Yellow", value: "Yellow", text: "Yellow" }
     ];
 
-    handleValueChange = (event, { value }) => {
+    finishOptions = [
+        { key: "Continue", value: "Continue", text: "To Bucket on Finish" },
+        { key: "GotoEnd", value: "GotoEnd", text: "Goto End on Finish" },
+        { key: "Delete", value: "Delete", text: "Delete Timer on Finish" }
+    ];
+
+    handleValueChange = (event, { name, value }) => {
         if (event.target.value !== undefined) {
             this.setState(
                 {
@@ -33,17 +40,22 @@ class AddTimerModal extends React.Component {
         } else if (value !== undefined) {
             this.setState(
                 {
-                    timerBucketColor: value
+                    [name]: value
                 },
                 this.setTimerDataOnStore
             );
+        } else {
+            this.setState({
+                [name]: !this.state[name]
+            });
         }
     };
 
-    handleChecked = () =>
+    handleFinishValueChange = (event, { value }) => {
         this.setState({
-            autoFinish: !this.state.autoFinish
+            finishOption: value
         });
+    };
 
     setTimerDataOnStore = () => {
         const timerAmount = Math.max(parseInt(this.state.timerValue), 0);
@@ -59,7 +71,8 @@ class AddTimerModal extends React.Component {
             parseInt(this.state.timerValue),
             this.state.timerBucketName,
             this.state.timerBucketColor,
-            this.state.autoFinish
+            this.state.finishOption,
+            this.state.autoStart
         );
     };
 
@@ -72,7 +85,13 @@ class AddTimerModal extends React.Component {
     };
 
     render() {
-        const { timerValue, timerBucketName, timerBucketColor } = this.state;
+        const {
+            timerValue,
+            timerBucketName,
+            timerBucketColor,
+            finishOption,
+            autoStart
+        } = this.state;
 
         return (
             <Modal open={true} size="small">
@@ -108,12 +127,19 @@ class AddTimerModal extends React.Component {
                         error={timerBucketColor.length === 0}
                         value={timerBucketColor}
                     />
+                    <Dropdown
+                        name="timerBucketColor"
+                        selection
+                        placeholder="Select a Time Group"
+                        options={this.finishOptions}
+                        onChange={this.handleFinishValueChange}
+                        value={finishOption}
+                    />
                     <Checkbox
-                        style={{ marginTop: 5 }}
-                        onChange={this.handleChecked}
-                        toggle
-                        label="Auto-finish"
-                        checked={this.state.autoFinish}
+                        name="autoStart"
+                        onChange={this.handleValueChange}
+                        label="Start Automatically"
+                        checked={autoStart}
                     />
                 </Modal.Content>
 

@@ -7,7 +7,7 @@ export function addNewTimeBucket(bucketName, bucketColor) {
             id: ActionTypes.generateID(),
             name: bucketName,
             color: bucketColor,
-            amount: 50
+            amount: 0
         }
     };
 }

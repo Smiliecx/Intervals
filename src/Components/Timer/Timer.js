@@ -44,10 +44,13 @@ class Timer extends React.Component {
         );
 
         if (timerData.duration <= 0) {
-            if (timerData.autoFinish) {
+            if (timerData.finishOption === "GotoEnd") {
                 this.stopTimer();
                 this.props.moveFrontToBack();
-            } else {
+            } else if (timerData.finishOption === "Delete") {
+                 this.removeTimer();   
+                 return;
+            }else {
                 this.props.increaseBucketAmountByColor(
                     timerData.timerBucketColor,
                     timeElapsedInSeconds
@@ -146,7 +149,7 @@ class Timer extends React.Component {
     };
 
     componentDidMount = () => {
-        if (this.props.bIsFirstTimer) {
+        if (this.props.bIsFirstTimer && this.props.timerData.autoStart) {
             this.startTimer();
         }
     };
@@ -159,6 +162,8 @@ class Timer extends React.Component {
                     this.props.editTimerByID(this.props.timerData.id,{
                         forceStart: false
                     })
+                } else if (this.props.timerData.autoStart) {
+                    this.startTimer();
                 }
             } else {
                 this.clearTimer();
