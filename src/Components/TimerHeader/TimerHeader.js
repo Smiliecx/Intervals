@@ -1,5 +1,7 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Icon, Menu, Container, ListIcon } from "semantic-ui-react";
+import { clearAllTimers } from "../../Redux/Actions/TimerActions";
 import AddTimerModal from "./AddTimerModal";
 import ManageIntervalModal from "./ManageIntervalModal";
 
@@ -20,6 +22,10 @@ class TimerHeader extends React.Component {
             bDisplayAddTimerModal: false,
             bDisplayIntervalsModal: false
         });
+    };
+
+    clearAllTimers = () => {
+        this.props.clearAllTimers();
     };
 
     render() {
@@ -49,6 +55,10 @@ class TimerHeader extends React.Component {
                             <Icon name="edit" />
                             Manage Intervals
                         </Menu.Item>
+                        <Menu.Item as="a" onClick={this.clearAllTimers} header>
+                            <Icon name="remove" />
+                            Clear All Timers
+                        </Menu.Item>
                     </Container>
                 </Menu>
 
@@ -63,4 +73,7 @@ class TimerHeader extends React.Component {
     }
 }
 
-export default TimerHeader;
+export default connect(
+    null,
+    { clearAllTimers }
+)(TimerHeader);

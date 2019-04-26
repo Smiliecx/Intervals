@@ -5,12 +5,15 @@ export const addNewInterval = (name, timers) => {
         type: ActionTypes.ADD_NEW_INTERVAL,
         id: ActionTypes.generateID(),
         name,
-        timers
+        timers: timers.map( (timer) => {
+            return {
+                ...timer
+            }
+        })
     };
 };
 
 export const removeIntervalByID = (id) => {
-    console.log("remove: ", id);
     return {
         type: ActionTypes.REMOVE_INTERVAL_BY_ID,
         id

@@ -117,6 +117,16 @@ export function TimerReducer(state = intitialTimerState, action) {
                 ...state,
                 timerList: copiedArray
             };
+        case ActionTypes.APPEND_INTERVAL:
+            return {
+                ...state,
+                timerList: state.timerList.concat(action.timersToAppend)
+            };
+        case ActionTypes.CLEAR_ALL_TIMERS:
+            return {
+                ...state,
+                timerList: []
+            };
         default:
             return state;
     }

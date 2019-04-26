@@ -86,15 +86,34 @@ export const restartTimerByID = (id) => {
 };
 
 export const moveTimerByID = (id, direction) => {
-    if (direction <= 0){
+    if (direction <= 0) {
         direction = -1;
-    }else {
+    } else {
         direction = 1;
     }
-    
+
     return {
         type: ActionTypes.MOVE_TIMER_BY_ID,
         id,
         direction
+    };
+};
+
+export const appendInterval = (timersToAppend) => {
+    let copiedTimers = timersToAppend.map((timer) => {
+        return {
+            ...timer
+        };
+    });
+    copiedTimers.forEach((timer) => (timer.id = ActionTypes.generateID()));
+    return {
+        type: ActionTypes.APPEND_INTERVAL,
+        timersToAppend: copiedTimers
+    };
+};
+
+export const clearAllTimers = () => {
+    return {
+        type: ActionTypes.CLEAR_ALL_TIMERS
     }
 }

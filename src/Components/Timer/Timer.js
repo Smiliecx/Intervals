@@ -66,9 +66,13 @@ class Timer extends React.Component {
     };
 
     removeTimer = () => {
+        this.clearTimer();
+        this.props.removeTimerByID(this.props.timerData.id);
+    };
+
+    clearTimer = () => {
         this.stopTimer();
         this.state.unsubscribeFromStore();
-        this.props.removeTimerByID(this.props.timerData.id);
     };
 
     timerListChanged = (newState, prevState) => {
@@ -77,6 +81,11 @@ class Timer extends React.Component {
         const newTimer = newTimerList.find((timer) => {
             return timer.id === this.props.timerData.id;
         });
+
+        if (!newTimer) {
+            this.clearTimer();
+            return;
+        }
 
         if (newTimer.startingDuration !== this.state.startingDuration) {
             this.setState({
@@ -88,11 +97,11 @@ class Timer extends React.Component {
 
     moveTimerUp = () => {
         this.props.moveTimerByID(this.props.timerData.id, -1);
-    }
+    };
 
     moveTimerDown = () => {
         this.props.moveTimerByID(this.props.timerData.id, 1);
-    }
+    };
 
     restartTimer = () => {
         this.props.restartTimerByID(this.props.timerData.id);

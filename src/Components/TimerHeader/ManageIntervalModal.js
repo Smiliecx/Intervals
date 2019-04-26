@@ -1,7 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Modal, Button, Input, Divider, Table, Icon } from "semantic-ui-react";
-import { addNewInterval, removeIntervalByID } from "../../Redux/Actions/IntervalsActions";
+import {
+    addNewInterval,
+    removeIntervalByID
+} from "../../Redux/Actions/IntervalsActions";
+import { appendInterval } from "../../Redux/Actions/TimerActions";
 
 class ManageIntervalModal extends React.Component {
     state = {
@@ -93,8 +97,8 @@ class ManageIntervalModal extends React.Component {
                     <Divider />
 
                     <Table striped>
-                        <Table.Row>
-                            <Table.Header>
+                        <Table.Header>
+                            <Table.Row>
                                 <Table.HeaderCell width={3}>
                                     Interval Name
                                 </Table.HeaderCell>
@@ -107,41 +111,50 @@ class ManageIntervalModal extends React.Component {
                                 <Table.HeaderCell width={3}>
                                     Click to Delete Interval
                                 </Table.HeaderCell>
-                            </Table.Header>
-                            <Table.Body>
-                                {Object.keys(intervals).map(
-                                    (intervalKey, index) => {
-                                        const intervalObj =
-                                            intervals[intervalKey];
-                                        return (
-                                            <Table.Row key={intervalKey}>
-                                                <Table.Cell>
-                                                    {intervalObj.name}
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {intervalObj.timers.length}
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        link
-                                                        name="checkmark"
-                                                        color="green"
-                                                    />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        onClick={() => this.props.removeIntervalByID(intervalKey)}
-                                                        link
-                                                        name="close"
-                                                        color="red"
-                                                    />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                        );
-                                    }
-                                )}
-                            </Table.Body>
-                        </Table.Row>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {Object.keys(intervals).map(
+                                (intervalKey, index) => {
+                                    const intervalObj = intervals[intervalKey];
+                                    return (
+                                        <Table.Row key={intervalKey}>
+                                            <Table.Cell>
+                                                {intervalObj.name}
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                {intervalObj.timers.length}
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                <Icon
+                                                    onClick={() => {
+                                                        this.props.appendInterval(
+                                                            intervalObj.timers
+                                                        );
+                                                        this.props.closeModal();
+                                                    }}
+                                                    link
+                                                    name="checkmark"
+                                                    color="green"
+                                                />
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                <Icon
+                                                    onClick={() =>
+                                                        this.props.removeIntervalByID(
+                                                            intervalKey
+                                                        )
+                                                    }
+                                                    link
+                                                    name="close"
+                                                    color="red"
+                                                />
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    );
+                                }
+                            )}
+                        </Table.Body>
                     </Table>
                 </Modal.Content>
                 <Modal.Actions>
@@ -169,5 +182,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { addNewInterval, removeIntervalByID }
+    { addNewInterval, removeIntervalByID, appendInterval }
 )(ManageIntervalModal);
