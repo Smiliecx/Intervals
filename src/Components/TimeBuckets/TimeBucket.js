@@ -4,7 +4,7 @@ import {
     addNewTimeBucket,
     editBucketAmountByID
 } from "../../Redux/Actions/TimeBucketActions";
-import { Icon } from "semantic-ui-react";
+import { Icon, Menu } from "semantic-ui-react";
 
 class TimeBucket extends React.Component {
     render() {
@@ -17,23 +17,16 @@ class TimeBucket extends React.Component {
                     flexDirection: "column",
                     marginRight: 20
                 }}>
-                <span>
-                    <Icon
-                        style={{ alignSelf: "center" }}
-                        name="circle"
-                        size="small"
-                        color={bucketData.color.toLowerCase()}
-                    />
-                    {bucketData.name}
-                    <Icon
-                        style={{ marginLeft: 5 }}
-                        link
-                        name="upload"
-                        color={bucketData.color.toLowerCase()}
-                    />
-                </span>
-
-                <span style={{ alignSelf: "center" }}>{bucketData.amount}</span>
+                <Menu>
+                    <Menu.Item as="a">
+                        <Icon
+                            style={{ marginLeft: 5 }}
+                            name="upload"
+                            color={bucketData.color.toLowerCase()}
+                        />
+                        {bucketData.amount} in {bucketData.name}
+                    </Menu.Item>
+                </Menu>
             </span>
         );
     }

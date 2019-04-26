@@ -168,11 +168,11 @@ class Timer extends React.Component {
 
     render() {
         //prettier-ignore
-        const { timerData, bIsFirstTimer, bIsLastTimer, timerIndex } = this.props;
+        const { timerData, bIsFirstTimer, bIsLastTimer } = this.props;
         const { bDisplayEditTimerModal, bIsPlaying } = this.state;
         return (
             <React.Fragment>
-                <Segment color={timerData.bucketColor} raised>
+                <Segment color={timerData.timerBucketColor.toLowerCase()} raised>
                     <span
                         style={{
                             display: "flex",

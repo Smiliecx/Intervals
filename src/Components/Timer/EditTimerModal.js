@@ -1,13 +1,19 @@
 import React from "react";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 import { editTimerByID } from "../../Redux/Actions/TimerActions";
-import { Modal, Button, Confirm, Input } from "semantic-ui-react";
+import { Modal, Button, Confirm, Input, Checkbox } from "semantic-ui-react";
 
 class EditTimerModal extends React.Component {
     state = {
         intervalValue: "",
-        bConfirmingDelete: false
+        bConfirmingDelete: false,
+        autoFinish: false
     };
+
+    handleChecked = () =>
+        this.setState({
+            autoFinish: !this.state.autoFinish
+        });
 
     handleIntervalValueChange = (event) => {
         this.setState({
@@ -28,9 +34,10 @@ class EditTimerModal extends React.Component {
     };
 
     finishEdit = () => {
-        this.props.editTimerByID(this.props.timerID,{
-            duration: parseInt(this.state.intervalValue)
-        })
+        this.props.editTimerByID(this.props.timerID, {
+            duration: parseInt(this.state.intervalValue),
+            autoFinish: this.state.autoFinish
+        });
     };
 
     render() {
@@ -48,6 +55,13 @@ class EditTimerModal extends React.Component {
                         placeholder="Interval Amount"
                         value={intervalValue}
                         onChange={this.handleIntervalValueChange}
+                    />
+                    <Checkbox
+                        style={{ marginTop: 5 }}
+                        onChange={this.handleChecked}
+                        toggle
+                        label="Auto-finish"
+                        checked={this.state.autoFinish}
                     />
                 </Modal.Content>
                 <Modal.Actions>
@@ -72,4 +86,7 @@ class EditTimerModal extends React.Component {
     }
 }
 
-export default connect(null,{editTimerByID})(EditTimerModal);
+export default connect(
+    null,
+    { editTimerByID }
+)(EditTimerModal);
