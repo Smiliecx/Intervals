@@ -127,6 +127,17 @@ export function TimerReducer(state = intitialTimerState, action) {
                 ...state,
                 timerList: []
             };
+        case ActionTypes.MOVE_FRONT_TO_BACK:
+            let newTimerList = [
+                ...state.timerList.splice(1, state.timerList.length),
+                state.timerList[0]
+            ];
+            newTimerList[newTimerList.length-1].duration = newTimerList[newTimerList.length-1].startingDuration;
+            newTimerList[0].forceStart = true;
+            return {
+                ...state,
+                timerList: newTimerList
+            };
         default:
             return state;
     }

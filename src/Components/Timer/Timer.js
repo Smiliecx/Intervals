@@ -1,12 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Segment, Icon } from "semantic-ui-react";
+import { Segment, Icon, Checkbox } from "semantic-ui-react";
 import {
     setTimerDuration,
     removeTimerByID,
     incrementTimerDurationByID,
     restartTimerByID,
-    moveTimerByID
+    moveTimerByID,
+    moveFrontToBack,
+    editTimerByID
 } from "../../Redux/Actions/TimerActions";
 import moment from "moment";
 import { subscribe } from "../../Redux/StoreSubscriber";
@@ -42,10 +44,15 @@ class Timer extends React.Component {
         );
 
         if (timerData.duration <= 0) {
-            this.props.increaseBucketAmountByColor(
-                timerData.timerBucketColor,
-                timeElapsedInSeconds
-            );
+            if (timerData.autoFinish) {
+                this.stopTimer();
+                this.props.moveFrontToBack();
+            } else {
+                this.props.increaseBucketAmountByColor(
+                    timerData.timerBucketColor,
+                    timeElapsedInSeconds
+                );
+            }
         }
 
         this.setState({
@@ -147,8 +154,14 @@ class Timer extends React.Component {
     componentDidUpdate = (prevProps) => {
         if (prevProps.bIsFirstTimer !== this.props.bIsFirstTimer) {
             if (this.props.bIsFirstTimer) {
+                if (this.props.timerData.forceStart) {
+                    this.startTimer();
+                    this.props.editTimerByID(this.props.timerData.id,{
+                        forceStart: false
+                    })
+                }
             } else {
-                this.stopTimer();
+                this.clearTimer();
             }
         }
     };
@@ -244,6 +257,8 @@ export default connect(
         increaseBucketAmountByColor,
         incrementTimerDurationByID,
         restartTimerByID,
-        moveTimerByID
+        moveTimerByID,
+        moveFrontToBack,
+        editTimerByID
     }
 )(Timer);

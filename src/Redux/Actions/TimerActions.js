@@ -4,7 +4,7 @@ import * as ActionTypes from "./Types";
 //      id: number,
 //     duration: number
 //  }
-export const addNewTimer = (duration, timerBucketName, timerBucketColor) => {
+export const addNewTimer = (duration, timerBucketName, timerBucketColor, autoFinish) => {
     return {
         type: ActionTypes.ADD_NEW_TIMER,
         timerObj: {
@@ -12,7 +12,9 @@ export const addNewTimer = (duration, timerBucketName, timerBucketColor) => {
             duration,
             startingDuration: duration,
             timerBucketName,
-            timerBucketColor
+            timerBucketColor,
+            autoFinish,
+            forceStart: false
         }
     };
 };
@@ -115,5 +117,11 @@ export const appendInterval = (timersToAppend) => {
 export const clearAllTimers = () => {
     return {
         type: ActionTypes.CLEAR_ALL_TIMERS
+    }
+}
+
+export const moveFrontToBack = () => {
+    return {
+        type: ActionTypes.MOVE_FRONT_TO_BACK
     }
 }

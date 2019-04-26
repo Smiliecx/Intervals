@@ -4,13 +4,14 @@ import {
     addNewTimer,
     setLastTimerData
 } from "../../Redux/Actions/TimerActions";
-import { Modal, Input, Button, Dropdown } from "semantic-ui-react";
+import { Modal, Input, Button, Dropdown, Checkbox } from "semantic-ui-react";
 
 class AddTimerModal extends React.Component {
     state = {
         timerValue: this.props.lastTimerAmount,
         timerBucketName: this.props.lastTimerBucketName,
-        timerBucketColor: this.props.lastTimerColor
+        timerBucketColor: this.props.lastTimerColor,
+        autoFinish: false
     };
 
     dropDownOptions = [
@@ -30,22 +31,36 @@ class AddTimerModal extends React.Component {
                 this.setTimerDataOnStore
             );
         } else if (value !== undefined) {
-            this.setState({
-                timerBucketColor: value
-            }, this.setTimerDataOnStore);
+            this.setState(
+                {
+                    timerBucketColor: value
+                },
+                this.setTimerDataOnStore
+            );
         }
     };
 
+    handleChecked = () =>
+        this.setState({
+            autoFinish: !this.state.autoFinish
+        });
+
     setTimerDataOnStore = () => {
-        const timerAmount = Math.max(
-            parseInt(this.state.timerValue),
-            0
+        const timerAmount = Math.max(parseInt(this.state.timerValue), 0);
+        this.props.setLastTimerData(
+            timerAmount,
+            this.state.timerBucketName,
+            this.state.timerBucketColor
         );
-        this.props.setLastTimerData(timerAmount, this.state.timerBucketName, this.state.timerBucketColor)
-    }
+    };
 
     saveTimer = () => {
-        this.props.addNewTimer(parseInt(this.state.timerValue), this.state.timerBucketName, this.state.timerBucketColor);
+        this.props.addNewTimer(
+            parseInt(this.state.timerValue),
+            this.state.timerBucketName,
+            this.state.timerBucketColor,
+            this.state.autoFinish
+        );
     };
 
     isModalReadyForSubmit = () => {
@@ -92,6 +107,13 @@ class AddTimerModal extends React.Component {
                         onChange={this.handleValueChange}
                         error={timerBucketColor.length === 0}
                         value={timerBucketColor}
+                    />
+                    <Checkbox
+                        style={{ marginTop: 5 }}
+                        onChange={this.handleChecked}
+                        toggle
+                        label="Auto-finish"
+                        checked={this.state.autoFinish}
                     />
                 </Modal.Content>
 
