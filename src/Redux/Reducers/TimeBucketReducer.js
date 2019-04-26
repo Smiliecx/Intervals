@@ -53,6 +53,20 @@ export function TimeBucketReducer(state = initialBucketState, action) {
                     }
                 })
             };
+        case ActionTypes.DISTRIBUTE_TIME_BUCKET:
+            return {
+                ...state,
+                buckets: state.buckets.map((bucket) => {
+                    if (bucket.color === action.color) {
+                        return {
+                            ...bucket,
+                            amount: bucket.amount - action.amount
+                        };
+                    } else {
+                        return bucket;
+                    }
+                })
+            };
         default:
             return state;
     }

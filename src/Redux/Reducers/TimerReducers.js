@@ -1,4 +1,5 @@
 import * as ActionTypes from "../Actions/Types";
+import {distributeAmountOverArray} from "../../Utils/Utils";
 
 const intitialTimerState = {
     timerList: [],
@@ -132,11 +133,29 @@ export function TimerReducer(state = intitialTimerState, action) {
                 ...state.timerList.splice(1, state.timerList.length),
                 state.timerList[0]
             ];
-            newTimerList[newTimerList.length-1].duration = newTimerList[newTimerList.length-1].startingDuration;
+            newTimerList[newTimerList.length - 1].duration =
+                newTimerList[newTimerList.length - 1].startingDuration;
             newTimerList[0].forceStart = true;
             return {
                 ...state,
                 timerList: newTimerList
+            };
+        case ActionTypes.DISTRIBUTE_TIME_BUCKET:
+            console.log("REDUCER");
+            const clonedArray = state.timerList.map((timer) => {
+                return {
+                    ...timer
+                };
+            });
+            const filteredArray = clonedArray.filter((timer) => {
+                return timer.timerBucketColor === action.color;
+            });
+
+            distributeAmountOverArray(action.amount, filteredArray, "duration");
+
+            return {
+                ...state,
+                timerList: clonedArray
             };
         default:
             return state;

@@ -125,3 +125,11 @@ export const moveFrontToBack = () => {
         type: ActionTypes.MOVE_FRONT_TO_BACK
     }
 }
+
+export const distributeTimeBucket = (amount, color) => {
+    return {
+        type: ActionTypes.DISTRIBUTE_TIME_BUCKET,
+        amount,
+        color
+    }
+}
