@@ -2,9 +2,17 @@ import React from "react";
 import { connect } from "react-redux";
 import {
     addNewTimer,
-    setLastTimerData
+    setLastTimerData,
+    editTimerByID
 } from "../../Redux/Actions/TimerActions";
-import { Modal, Input, Button, Dropdown, Checkbox } from "semantic-ui-react";
+import {
+    Modal,
+    Input,
+    Button,
+    Dropdown,
+    Checkbox,
+    Confirm
+} from "semantic-ui-react";
 
 class AddTimerModal extends React.Component {
     state = {
@@ -12,7 +20,8 @@ class AddTimerModal extends React.Component {
         timerBucketName: this.props.lastTimerBucketName,
         timerBucketColor: this.props.lastTimerColor,
         finishOption: "Continue",
-        autoStart: true
+        autoStart: true,
+        bConfirmingDelete: false
     };
 
     dropDownOptions = [
@@ -51,6 +60,28 @@ class AddTimerModal extends React.Component {
         }
     };
 
+    confirmDelete = () => {
+        this.setState({
+            bConfirmingDelete: true
+        });
+    };
+
+    closeConfirmDelete = () => {
+        this.setState({
+            bConfirmingDelete: false
+        });
+    };
+
+    editTimer = () => {
+        this.props.editTimerByID(this.props.timerID, {
+            duration: parseInt(this.state.timerValue),
+            autoStart: this.state.autoStart,
+            finishOption: this.state.finishOption,
+            timerBucketName: this.state.lastTimerBucketName,
+            timerBucketColor: this.state.timerBucketColor
+        });
+    };
+
     handleFinishValueChange = (event, { value }) => {
         this.setState({
             finishOption: value
@@ -85,13 +116,10 @@ class AddTimerModal extends React.Component {
     };
 
     render() {
-        const {
-            timerValue,
-            timerBucketName,
-            timerBucketColor,
-            finishOption,
-            autoStart
-        } = this.state;
+        //prettier-ignore
+        const { timerValue, timerBucketName, timerBucketColor, finishOption, autoStart, bConfirmingDelete } = this.state;
+
+        const { bIsEdit } = this.props;
 
         return (
             <Modal open={true} size="small">
@@ -128,7 +156,7 @@ class AddTimerModal extends React.Component {
                         value={timerBucketColor}
                     />
                     <Dropdown
-                        name="timerBucketColor"
+                        name="finishOptions"
                         selection
                         placeholder="Select a Time Group"
                         options={this.finishOptions}
@@ -144,15 +172,28 @@ class AddTimerModal extends React.Component {
                 </Modal.Content>
 
                 <Modal.Actions>
+                    {bIsEdit && (
+                        <Button onClick={this.confirmDelete} color="red">
+                            Delete Timer
+                        </Button>
+                    )}
                     <Button
                         color="green"
-                        onClick={this.saveTimer}
-                        disabled={!this.isModalReadyForSubmit()}>
+                        onClick={bIsEdit ? this.editTimer : this.saveTimer}
+                        disabled={!(this.isModalReadyForSubmit() || bIsEdit)}>
                         Submit
                     </Button>
                     <Button color="red" onClick={this.props.closeModal}>
                         Close
                     </Button>
+                    {bIsEdit && (
+                        <Confirm
+                            size="small"
+                            open={bConfirmingDelete}
+                            onCancel={this.closeConfirmDelete}
+                            onConfirm={this.props.removeTimer}
+                        />
+                    )}
                 </Modal.Actions>
             </Modal>
         );
@@ -169,5 +210,5 @@ function mapStateToProps(state) {
 
 export default connect(
     mapStateToProps,
-    { addNewTimer, setLastTimerData }
+    { addNewTimer, setLastTimerData, editTimerByID }
 )(AddTimerModal);

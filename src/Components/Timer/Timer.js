@@ -14,6 +14,7 @@ import moment from "moment";
 import { subscribe } from "../../Redux/StoreSubscriber";
 import EditTimerModal from "./EditTimerModal";
 import { increaseBucketAmountByColor } from "../../Redux/Actions/TimeBucketActions";
+import EditorAddTimerModal from "../TimerHeader/EditorAddTimerModal";
 
 class Timer extends React.Component {
     state = {
@@ -243,7 +244,8 @@ class Timer extends React.Component {
                     </span>
                 </Segment>
                 {bDisplayEditTimerModal && (
-                    <EditTimerModal
+                    <EditorAddTimerModal
+                        bIsEdit={true}
                         closeModal={this.closeModals}
                         removeTimer={this.removeTimer}
                         timerID={timerData.id}

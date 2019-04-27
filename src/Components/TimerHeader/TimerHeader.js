@@ -4,6 +4,7 @@ import { Icon, Menu, Container, ListIcon } from "semantic-ui-react";
 import { clearAllTimers } from "../../Redux/Actions/TimerActions";
 import AddTimerModal from "./AddTimerModal";
 import ManageIntervalModal from "./ManageIntervalModal";
+import EditorAddTimerModal from "./EditorAddTimerModal";
 
 class TimerHeader extends React.Component {
     state = {
@@ -63,7 +64,7 @@ class TimerHeader extends React.Component {
                 </Menu>
 
                 {bDisplayAddTimerModal && (
-                    <AddTimerModal closeModal={this.closeModal} />
+                    <EditorAddTimerModal closeModal={this.closeModal} />
                 )}
                 {bDisplayIntervalsModal && (
                     <ManageIntervalModal closeModal={this.closeModal} />
