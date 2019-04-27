@@ -16,11 +16,11 @@ import {
 
 class AddTimerModal extends React.Component {
     state = {
-        timerValue: this.props.lastTimerAmount,
-        timerBucketName: this.props.lastTimerBucketName,
-        timerBucketColor: this.props.lastTimerColor,
-        finishOption: "Continue",
-        autoStart: true,
+        timerValue: (this.props.bIsEdit) ? this.props.timerData.startingDuration : this.props.lastTimerAmount,
+        timerBucketName: (this.props.bIsEdit) ? this.props.timerData.timerBucketName : this.props.lastTimerBucketName,
+        timerBucketColor: (this.props.bIsEdit) ? this.props.timerData.timerBucketColor : this.props.lastTimerColor,
+        finishOption: (this.props.bIsEdit) ? this.props.timerData.finishOption : "Continue",
+        autoStart: (this.props.bIsEdit) ? this.props.timerData.autoStart : true,
         bConfirmingDelete: false
     };
 
@@ -40,6 +40,9 @@ class AddTimerModal extends React.Component {
 
     handleValueChange = (event, { name, value }) => {
         if (event.target.value !== undefined) {
+            if (event.target.name === "timerValue") {
+                if (event.target.value === "") return;
+            }
             this.setState(
                 {
                     [event.target.name]: event.target.value

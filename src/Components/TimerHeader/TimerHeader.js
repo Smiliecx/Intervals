@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Icon, Menu, Container, ListIcon } from "semantic-ui-react";
 import { clearAllTimers } from "../../Redux/Actions/TimerActions";
-import AddTimerModal from "./AddTimerModal";
 import ManageIntervalModal from "./ManageIntervalModal";
 import EditorAddTimerModal from "./EditorAddTimerModal";
 

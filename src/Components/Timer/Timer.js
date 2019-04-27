@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Segment, Icon, Checkbox } from "semantic-ui-react";
+import { Segment, Icon } from "semantic-ui-react";
 import {
     setTimerDuration,
     removeTimerByID,
@@ -12,7 +12,6 @@ import {
 } from "../../Redux/Actions/TimerActions";
 import moment from "moment";
 import { subscribe } from "../../Redux/StoreSubscriber";
-import EditTimerModal from "./EditTimerModal";
 import { increaseBucketAmountByColor } from "../../Redux/Actions/TimeBucketActions";
 import EditorAddTimerModal from "../TimerHeader/EditorAddTimerModal";
 
@@ -49,9 +48,9 @@ class Timer extends React.Component {
                 this.stopTimer();
                 this.props.moveFrontToBack();
             } else if (timerData.finishOption === "Delete") {
-                 this.removeTimer();   
-                 return;
-            }else {
+                this.removeTimer();
+                return;
+            } else {
                 this.props.increaseBucketAmountByColor(
                     timerData.timerBucketColor,
                     timeElapsedInSeconds
@@ -83,7 +82,9 @@ class Timer extends React.Component {
 
     clearTimer = () => {
         this.stopTimer();
-        this.state.unsubscribeFromStore();
+        if (this.state.unsubscribeFromStore !== null) {
+            this.state.unsubscribeFromStore();
+        }
     };
 
     timerListChanged = (newState, prevState) => {
@@ -160,9 +161,9 @@ class Timer extends React.Component {
             if (this.props.bIsFirstTimer) {
                 if (this.props.timerData.forceStart) {
                     this.startTimer();
-                    this.props.editTimerByID(this.props.timerData.id,{
+                    this.props.editTimerByID(this.props.timerData.id, {
                         forceStart: false
-                    })
+                    });
                 } else if (this.props.timerData.autoStart) {
                     this.startTimer();
                 }
@@ -178,7 +179,9 @@ class Timer extends React.Component {
         const { bDisplayEditTimerModal, bIsPlaying } = this.state;
         return (
             <React.Fragment>
-                <Segment color={timerData.timerBucketColor.toLowerCase()} raised>
+                <Segment
+                    color={timerData.timerBucketColor.toLowerCase()}
+                    raised>
                     <span
                         style={{
                             display: "flex",
@@ -245,6 +248,7 @@ class Timer extends React.Component {
                 </Segment>
                 {bDisplayEditTimerModal && (
                     <EditorAddTimerModal
+                        timerData={timerData}
                         bIsEdit={true}
                         closeModal={this.closeModals}
                         removeTimer={this.removeTimer}
